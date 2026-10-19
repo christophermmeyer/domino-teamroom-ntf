@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    image: teamroom:dev
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DATA_DIR=/data
+    volumes:
+      - teamroom-data:/data
+    # SQLite has one writer. Never scale this service above one replica;
+    # the Postgres dialect is the scaling path, not a second container.
+    deploy:
+      replicas: 1
+    restart: unless-stopped
+
+volumes:
+  teamroom-data:
